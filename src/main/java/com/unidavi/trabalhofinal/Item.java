@@ -1,9 +1,8 @@
 package com.unidavi.trabalhofinal;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * Pedido
+ * Item
  */
 @Entity
 @Data
@@ -22,11 +21,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Pedido {
+@IdClass(CompositeKey.class)
+public class Item {
 
     @Id
-    Long numero;
+    Long pedidoNumero;
+    @Id
+    Long produtoId;
+    Integer quantidade;
     Double total;
-    Date dataCriacao;
-    Long clienteId;
 }
