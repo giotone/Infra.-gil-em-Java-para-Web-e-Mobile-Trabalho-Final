@@ -62,6 +62,11 @@ public class ProdutoRestController {
     @GetMapping("/nome/{nome}")
 	public ResponseEntity<List<ProdutoResource>> findByNome(@PathVariable String nome) {
 		return new ResponseEntity<>(assembler.toResources(repository.findByNomeContaining(nome)), HttpStatus.OK);
+    }
+    
+    @GetMapping("/marca/{marca}")
+	public ResponseEntity<List<ProdutoResource>> findByMarca(@PathVariable String marca) {
+		return new ResponseEntity<>(assembler.toResources(repository.findByMarca(marca)), HttpStatus.OK);
 	}
 	
 	@PostMapping
