@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
+
 /**
  * ProdutoRestController
  */
@@ -42,13 +44,16 @@ public class ProdutoRestController {
         // String marca;
         // Double valor;
 	}
-	
+    
+    @Secured("ROLE_USER")
+    @ApiOperation("Retorna toda a lista de produtos sem filtro")
 	@GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<List<ProdutoResource>> getAll() {
 		return new ResponseEntity<>(assembler.toResources(repository.findAll()), HttpStatus.OK);
 	}
     
     @Secured("ROLE_USER")
+    @ApiOperation("Retorna os dados de um produto específico buscando pelo id")
 	@GetMapping("/{id}")
 	public ResponseEntity<ProdutoResource> get(@PathVariable Long id) {
 		Produto produto = repository.findOne(id);
@@ -59,16 +64,22 @@ public class ProdutoRestController {
 		}
     }
     
+    @Secured("ROLE_USER")
+    @ApiOperation("Retorna os dados de um produto específico buscando pelo conteudo do nome")
     @GetMapping("/nome/{nome}")
 	public ResponseEntity<List<ProdutoResource>> findByNome(@PathVariable String nome) {
 		return new ResponseEntity<>(assembler.toResources(repository.findByNomeContaining(nome)), HttpStatus.OK);
     }
     
+    @Secured("ROLE_USER")
+    @ApiOperation("Retorna os dados de um produto específico buscando pela marca")
     @GetMapping("/marca/{marca}")
 	public ResponseEntity<List<ProdutoResource>> findByMarca(@PathVariable String marca) {
 		return new ResponseEntity<>(assembler.toResources(repository.findByMarca(marca)), HttpStatus.OK);
 	}
-	
+    
+    @Secured("ROLE_MANAGER")
+    @ApiOperation("Adiciona um novo produto")
 	@PostMapping
 	public ResponseEntity<ProdutoResource> create(@RequestBody Produto produto) {
 		produto = repository.save(produto);
@@ -78,7 +89,9 @@ public class ProdutoRestController {
 			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
-	
+    
+    @Secured("ROLE_MANAGER")
+    @ApiOperation("altera um produto existente com base no id")
 	@PutMapping("/{id}")
 	public ResponseEntity<ProdutoResource> update(@PathVariable Long id, @RequestBody Produto produto) {
 		if (produto != null) {
@@ -91,6 +104,7 @@ public class ProdutoRestController {
 	}
         
     @Secured("ROLE_MANAGER")
+    @ApiOperation("apaga um produto existente com base no id")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ProdutoResource> delete(@PathVariable Long id) {
 		Produto produto = repository.findOne(id);

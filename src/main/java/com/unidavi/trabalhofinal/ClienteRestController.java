@@ -1,6 +1,5 @@
 package com.unidavi.trabalhofinal;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +18,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.ApiOperation;
 
 /**
  * ClienteRestController
@@ -45,13 +46,16 @@ public class ClienteRestController {
         // String cpf;
         // Date dataNascimento;
 	}
-	
+    
+    @Secured("ROLE_USER")
+    @ApiOperation("Retorna toda a lista de clientes sem filtro")
 	@GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<List<ClienteResource>> getAll() {
 		return new ResponseEntity<>(assembler.toResources(repository.findAll()), HttpStatus.OK);
 	}
     
     @Secured("ROLE_USER")
+    @ApiOperation("Retorna os dados de um cliente específico buscando pelo id")
 	@GetMapping("/{id}")
 	public ResponseEntity<ClienteResource> get(@PathVariable Long id) {
 		Cliente cliente = repository.findOne(id);
@@ -62,11 +66,36 @@ public class ClienteRestController {
 		}
     }
     
+    @Secured("ROLE_USER")
+    @ApiOperation("Retorna os dados de um cliente específico buscando pelo conteudo do nome")
     @GetMapping("/nome/{nome}")
 	public ResponseEntity<List<ClienteResource>> findByNome(@PathVariable String nome) {
 		return new ResponseEntity<>(assembler.toResources(repository.findByNomeContaining(nome)), HttpStatus.OK);
+    }
+    
+    @Secured("ROLE_USER")
+    @ApiOperation("Retorna os dados de um cliente específico buscando pela rua do endereço")
+    @GetMapping("/endereco/rua/{rua}")
+	public ResponseEntity<List<ClienteResource>> findByRua(@PathVariable String rua) {
+		return new ResponseEntity<>(assembler.toResources(repository.findByRuaContaining("%"+rua+"%")), HttpStatus.OK);
+    }
+    
+    @Secured("ROLE_USER")
+    @ApiOperation("Retorna os dados de um cliente específico buscando pela cidade do endereço")
+    @GetMapping("/endereco/cidade/{cidade}")
+	public ResponseEntity<List<ClienteResource>> findByCidade(@PathVariable String cidade) {
+		return new ResponseEntity<>(assembler.toResources(repository.findByCidadeContaining("%"+cidade+"%")), HttpStatus.OK);
+    }
+    
+    @Secured("ROLE_USER")
+    @ApiOperation("Retorna os dados de um cliente específico buscando pelo esatado do endereço")
+    @GetMapping("/endereco/estado/{estado}")
+	public ResponseEntity<List<ClienteResource>> findByEstado(@PathVariable String estado) {
+		return new ResponseEntity<>(assembler.toResources(repository.findByEstadoContaining(estado)), HttpStatus.OK);
 	}
-	
+    
+    @Secured("ROLE_MANAGER")
+    @ApiOperation("Adiciona um novo cliente")
 	@PostMapping
 	public ResponseEntity<ClienteResource> create(@RequestBody Cliente cliente) {
 		cliente = repository.save(cliente);
@@ -76,7 +105,8 @@ public class ClienteRestController {
 			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
-	
+	@Secured("ROLE_MANAGER")
+    @ApiOperation("altera um cliente existente com base no id")
 	@PutMapping("/{id}")
 	public ResponseEntity<ClienteResource> update(@PathVariable Long id, @RequestBody Cliente cliente) {
 		if (cliente != null) {
@@ -89,6 +119,7 @@ public class ClienteRestController {
 	}
         
     @Secured("ROLE_MANAGER")
+    @ApiOperation("apaga um cliente existente com base no id")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ClienteResource> delete(@PathVariable Long id) {
 		Cliente cliente = repository.findOne(id);
