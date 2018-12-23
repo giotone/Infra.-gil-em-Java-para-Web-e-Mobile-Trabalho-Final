@@ -61,7 +61,14 @@ public class PedidoRestController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-    }
+    }    
+
+    // @Secured("ROLE_USER")
+    // @ApiOperation("Retorna os dados de um pedido específico buscando pelo conteudo da data de criação")
+    // @GetMapping("/data/{data}")
+	// public ResponseEntity<List<PedidoResource>> findByDataCriacao(@PathVariable String data) {
+	// 	return new ResponseEntity<>(assembler.toResources(repository.findByDataCriacao(data)), HttpStatus.OK);
+    // }
 
     @Secured("ROLE_MANAGER")
     @ApiOperation("Adiciona um novo pedido")

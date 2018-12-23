@@ -1,0 +1,30 @@
+{
+    "run": {
+        "default": "",
+        "items": [
+            {
+                "name": "trabalhofinal",
+                "projectName": "trabalhofinal",
+                "workingDirectory": "/home/gt2a/Pos_Unidavi/Infra Agil em Java para Web e Mobile/trabalhofinal",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    },
+    "debug": {
+        "default": "",
+        "items": [
+            {
+                "name": "trabalhofinal",
+                "projectName": "trabalhofinal",
+                "workingDirectory": "/home/gt2a/Pos_Unidavi/Infra Agil em Java para Web e Mobile/trabalhofinal",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    }
+}
